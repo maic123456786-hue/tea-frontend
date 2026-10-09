@@ -2,7 +2,6 @@ const chatBox = document.getElementById('chatBox');
 const messageInput = document.getElementById('messageInput');
 const sendBtn = document.getElementById('sendBtn');
 
-// ⚠️ 这里填你 Vercel 后端的地址，注意末尾不要加 /
 const API_URL = 'https://tea-backend-one.vercel.app';
 
 async function sendMessage() {
@@ -13,7 +12,7 @@ async function sendMessage() {
   messageInput.value = '';
   sendBtn.disabled = true;
 
-  const loadingId = addMessage('tea 正在思考...', 'assistant');
+  const loadingId = addMessage('小鲸鱼正在思考...', 'assistant');
 
   try {
     const response = await fetch(`${API_URL}/chat`, {
@@ -38,7 +37,7 @@ function addMessage(text, role) {
 
   const avatar = document.createElement('img');
   avatar.className = 'avatar';
-  avatar.src = role === 'user' ? getUserAvatar() : 'tea.png';
+  avatar.src = role === 'user' ? getUserAvatar() : getXiaoJingYuAvatar();
 
   const bubble = document.createElement('div');
   bubble.className = `message ${role}`;
@@ -63,27 +62,48 @@ sendBtn.addEventListener('click', sendMessage);
 messageInput.addEventListener('keypress', (e) => {
   if (e.key === 'Enter') sendMessage();
 });
-// ==== 一键换头像 ====
+
+// ==== 换头像逻辑（支持换我 和 换小鲸鱼） ====
 const avatarBtn = document.getElementById('avatarBtn');
+const avatarMenu = document.getElementById('avatarMenu');
 const avatarInput = document.createElement('input');
 avatarInput.type = 'file';
 avatarInput.accept = 'image/*';
+let currentTarget = 'user';
 
-avatarBtn.addEventListener('click', () => {
-  avatarInput.click();
+avatarBtn.addEventListener('click', (e) => {
+  e.stopPropagation();
+  avatarMenu.style.display = avatarMenu.style.display === 'block' ? 'none' : 'block';
 });
+
+document.addEventListener('click', () => {
+  avatarMenu.style.display = 'none';
+});
+
+window.chooseAvatar = function(target) {
+  currentTarget = target;
+  avatarInput.click();
+};
 
 avatarInput.addEventListener('change', (e) => {
   const file = e.target.files[0];
   if (!file) return;
   const reader = new FileReader();
   reader.onload = (event) => {
-    localStorage.setItem('userAvatar', event.target.result);
-    alert('头像换好啦！下次发消息就能看到');
+    if (currentTarget === 'user') {
+      localStorage.setItem('userAvatar', event.target.result);
+      alert('你的头像换好啦！');
+    } else {
+      localStorage.setItem('xiaojingyuAvatar', event.target.result);
+      alert('小鲸鱼的头像换好啦！');
+    }
   };
   reader.readAsDataURL(file);
 });
 
 function getUserAvatar() {
   return localStorage.getItem('userAvatar') || 'me.png';
+}
+function getXiaoJingYuAvatar() {
+  return localStorage.getItem('xiaojingyuAvatar') || 'xiaojingyu.png';
 }
