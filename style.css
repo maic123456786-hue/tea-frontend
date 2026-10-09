@@ -21,15 +21,24 @@ body {
 }
 
 .header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   padding: 18px;
   background: #a8e6cf;
-  text-align: center;
 }
 .header h1 {
   font-size: 18px;
   font-weight: 600;
   color: #2d6a5a;
   letter-spacing: 1px;
+}
+.header button {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  padding-right: 10px;
 }
 
 .chat-box {
