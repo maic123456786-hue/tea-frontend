@@ -4,6 +4,20 @@ const sendBtn = document.getElementById('sendBtn');
 
 const API_URL = 'https://tea-backend-one.vercel.app';
 
+// 页面加载时，自动拉取历史消息
+window.addEventListener('load', async () => {
+  try {
+    const res = await fetch(`${API_URL}/history?sessionId=1`);
+    const data = await res.json();
+    if (data.history && data.history.length > 0) {
+      chatBox.innerHTML = ''; // 清空默认欢迎语
+      data.history.forEach(m => addMessage(m.content, m.role));
+    }
+  } catch (e) {
+    console.log('拉取历史失败:', e);
+  }
+});
+
 async function sendMessage() {
   const text = messageInput.value.trim();
   if (!text) return;
@@ -20,11 +34,10 @@ async function sendMessage() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ message: text, sessionId: 1 })
     });
-
     const data = await response.json();
-    document.getElementById(loadingId).querySelector('.message').textContent = data.reply || '出错了，没收到回复';
+    document.getElementById(loadingId).querySelector('.message').textContent = data.reply || '出错了';
   } catch (error) {
-    document.getElementById(loadingId).querySelector('.message').textContent = '网络错误，请检查后端是否在运行';
+    document.getElementById(loadingId).querySelector('.message').textContent = '网络错误';
   } finally {
     sendBtn.disabled = false;
     chatBox.scrollTop = chatBox.scrollHeight;
@@ -63,7 +76,7 @@ messageInput.addEventListener('keypress', (e) => {
   if (e.key === 'Enter') sendMessage();
 });
 
-// ==== 换头像逻辑（支持换我 和 换小鲸鱼） ====
+// ==== 换头像逻辑 ====
 const avatarBtn = document.getElementById('avatarBtn');
 const avatarMenu = document.getElementById('avatarMenu');
 const avatarInput = document.createElement('input');
