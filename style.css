@@ -132,3 +132,52 @@ body {
 }
 .input-area button:hover { background: #91dbbf; }
 .input-area button:disabled { background: #d4f3e8; color: #9bc4b7; cursor: not-allowed; }
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px;
+  background: #a8e6cf;
+  position: relative;
+}
+.header h1 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #2d6a5a;
+  letter-spacing: 1px;
+}
+.header button {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  padding-right: 10px;
+}
+
+.avatar-menu {
+  display: none;
+  position: absolute;
+  right: 10px;
+  top: 50px;
+  background: #ffffff;
+  border: 1.5px solid #d4f3e8;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(120, 200, 180, 0.3);
+  padding: 6px;
+  z-index: 10;
+}
+.avatar-menu button {
+  display: block;
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 8px 14px;
+  text-align: left;
+  font-size: 14px;
+  color: #2d6a5a;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.avatar-menu button:hover {
+  background: #e0f7f1;
+}
