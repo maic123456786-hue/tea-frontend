@@ -38,7 +38,7 @@ function addMessage(text, role) {
 
   const avatar = document.createElement('img');
   avatar.className = 'avatar';
-  avatar.src = role === 'user' ? 'me.png' : 'tea.png';
+  avatar.src = role === 'user' ? getUserAvatar() : 'tea.png';
 
   const bubble = document.createElement('div');
   bubble.className = `message ${role}`;
@@ -63,3 +63,27 @@ sendBtn.addEventListener('click', sendMessage);
 messageInput.addEventListener('keypress', (e) => {
   if (e.key === 'Enter') sendMessage();
 });
+// ==== 一键换头像 ====
+const avatarBtn = document.getElementById('avatarBtn');
+const avatarInput = document.createElement('input');
+avatarInput.type = 'file';
+avatarInput.accept = 'image/*';
+
+avatarBtn.addEventListener('click', () => {
+  avatarInput.click();
+});
+
+avatarInput.addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (event) => {
+    localStorage.setItem('userAvatar', event.target.result);
+    alert('头像换好啦！下次发消息就能看到');
+  };
+  reader.readAsDataURL(file);
+});
+
+function getUserAvatar() {
+  return localStorage.getItem('userAvatar') || 'me.png';
+}
